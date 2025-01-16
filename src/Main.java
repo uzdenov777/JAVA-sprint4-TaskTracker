@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        InMemoryTaskManager manager = new InMemoryTaskManager();
+        TaskManager manager = Managers.getDefault();
         Task task1 = new Task("task1", "task1task1", manager.getNewId(), StatusTask.NEW);
         Task task2 = new Task("task2", "task2task2", manager.getNewId(),  StatusTask.NEW);
         Epic epic1 = new Epic("epic1", "epic1epic1", manager.getNewId(),  StatusTask.NEW);
@@ -25,5 +25,7 @@ public class Main {
         manager.updateSubtask(subtask5);
         System.out.println(manager.getEpic(epic1.getId()));
         System.out.println(manager.getListSubtasks(epic1.getId()));
+        System.out.println(" ");
+        System.out.println(manager.getHistory());
     }
 }

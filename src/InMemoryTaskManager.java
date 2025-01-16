@@ -1,19 +1,23 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 class InMemoryTaskManager implements TaskManager {
-    private HashMap<Integer, Task> tasks = new HashMap<>(); //Хранит задачи.
-    private HashMap<Integer, Epic> epics = new HashMap<>();//Хранит Epic.
-    private HashMap<Integer, Subtask> subtasks = new HashMap<>();//Хранит подзадачи.
-    private List<Task> historyTask = new ArrayList<>();//Хранит последние 10 просмотренных пользователем задач.
-
+    private final HashMap<Integer, Task> tasks = new HashMap<>(); //Хранит задачи.
+    private final HashMap<Integer, Epic> epics = new HashMap<>();//Хранит Epic.
+    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();//Хранит подзадачи.
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
     private int countId = 0;
 
+    @Override
     public int getNewId() {//Генерирует уникальный ID.
         countId++;
         return countId;
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
     }
 
     @Override
@@ -53,7 +57,7 @@ class InMemoryTaskManager implements TaskManager {
 
         if (tasks.containsKey(id)) { //Проверяет ID, принадлежит задачам.
             getTask = Optional.of(tasks.get(id));
-            addTaskHistory(tasks.get(id));
+            historyManager.add(tasks.get(id));
         } else {
             System.out.println("Не существует такого ID Task");
         }
@@ -66,7 +70,7 @@ class InMemoryTaskManager implements TaskManager {
 
         if (epics.containsKey(id)) { //Проверяет ID, принадлежит Epic.
             getTask = Optional.of(epics.get(id));
-            addTaskHistory(epics.get(id));
+            historyManager.add(epics.get(id));
         } else {
             System.out.println("Не существует такого ID Epic");
         }
@@ -79,7 +83,7 @@ class InMemoryTaskManager implements TaskManager {
 
         if (subtasks.containsKey(id)) { //Проверяет ID, принадлежит ли подзадачам.
             getTask = Optional.of(subtasks.get(id));
-            addTaskHistory(subtasks.get(id));
+            historyManager.add(subtasks.get(id));
         } else {
             System.out.println("Не существует такого ID Subtask");
         }
@@ -188,15 +192,5 @@ class InMemoryTaskManager implements TaskManager {
         return new HashMap<>();
     }
 
-    @Override
-    public List<Task> getHistory() {//Возвращает последние 10 просмотренных пользователем задач.
-        return historyTask;
-    }
 
-    private void addTaskHistory(Task taskInput) {//Контролирует historyTask, чтобы в нем хранилось не больше 10 задач.
-        if (historyTask.size() == 10) {
-            historyTask.remove(0);
-        }
-        historyTask.add(taskInput);
-    }
 }

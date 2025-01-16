@@ -42,6 +42,7 @@ interface TaskManager {
 
     HashMap<Integer, Subtask> getListSubtasks(int id); //Получение списка всех подзадач определённого Epic.
 
-    List<Task> getHistory();
+    int getNewId();
 
+    List<Task> getHistory();
 }
