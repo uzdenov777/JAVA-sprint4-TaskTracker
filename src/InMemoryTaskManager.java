@@ -1,6 +1,4 @@
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> tasks = new HashMap<>(); //Хранит задачи.
@@ -21,18 +19,21 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public HashMap<Integer, Task> getTasks() { //Получение списка всех задач
-        return tasks;
+    public List<Task> getTasks() { //Получение списка всех задач
+        List<Task> taskList = new ArrayList<>(tasks.values());
+        return taskList;
     }
 
     @Override
-    public HashMap<Integer, Epic> getEpics() { //Получение списка всех Epic
-        return epics;
+    public List<Epic> getEpics() { //Получение списка всех Epic
+        List<Epic> epicList = new ArrayList<>(epics.values());
+        return epicList;
     }
 
     @Override
-    public HashMap<Integer, Subtask> getSubtasks() { //Получение списка всех подзадач
-        return subtasks;
+    public List<Subtask> getSubtasks() { //Получение списка всех подзадач
+        List<Subtask> subtaskList = new ArrayList<>(subtasks.values());
+        return subtaskList;
     }
 
     @Override

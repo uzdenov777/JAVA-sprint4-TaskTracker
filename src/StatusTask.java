@@ -1,6 +1,6 @@
 import java.util.HashMap;
 
-public enum StatusTask {
+ enum StatusTask {
     NEW,
     IN_PROGRESS,
     DONE;

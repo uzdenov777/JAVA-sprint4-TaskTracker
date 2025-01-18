@@ -4,11 +4,11 @@ import java.util.Optional;
 
 public interface TaskManager {
 
-    HashMap<Integer, Task> getTasks(); //Получение списка всех задач
+    List<Task> getTasks(); //Получение списка всех задач
 
-    HashMap<Integer, Epic> getEpics(); //Получение списка всех Epic
+    List<Epic> getEpics(); //Получение списка всех Epic
 
-    HashMap<Integer, Subtask> getSubtasks(); //Получение списка всех подзадач
+    List<Subtask> getSubtasks(); //Получение списка всех подзадач
 
     void clearTasks(); //Удаление всех задач.
 
