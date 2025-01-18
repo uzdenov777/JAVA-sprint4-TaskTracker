@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-interface TaskManager {
+public interface TaskManager {
 
     HashMap<Integer, Task> getTasks(); //Получение списка всех задач
 

@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-class InMemoryTaskManager implements TaskManager {
+public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> tasks = new HashMap<>(); //Хранит задачи.
     private final HashMap<Integer, Epic> epics = new HashMap<>();//Хранит Epic.
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();//Хранит подзадачи.
@@ -53,46 +53,42 @@ class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Optional<Task> getTask(int id) { //Получение Task по идентификатору.
-        Optional<Task> getTask = Optional.empty();
 
         if (tasks.containsKey(id)) { //Проверяет ID, принадлежит задачам.
-            getTask = Optional.of(tasks.get(id));
             historyManager.add(tasks.get(id));
         } else {
             System.out.println("Не существует такого ID Task");
         }
-        return getTask;
+        return Optional.ofNullable(tasks.get(id));
     }
 
     @Override
     public Optional<Epic> getEpic(int id) { //Получение Epic по идентификатору.
-        Optional<Epic> getTask = Optional.empty();
 
         if (epics.containsKey(id)) { //Проверяет ID, принадлежит Epic.
-            getTask = Optional.of(epics.get(id));
             historyManager.add(epics.get(id));
         } else {
             System.out.println("Не существует такого ID Epic");
         }
-        return getTask;
+        return Optional.ofNullable(epics.get(id));
     }
 
     @Override
     public Optional<Subtask> getSubtask(int id) { //Получение Subtask по идентификатору.
-        Optional<Subtask> getTask = Optional.empty();
 
         if (subtasks.containsKey(id)) { //Проверяет ID, принадлежит ли подзадачам.
-            getTask = Optional.of(subtasks.get(id));
             historyManager.add(subtasks.get(id));
         } else {
             System.out.println("Не существует такого ID Subtask");
         }
-        return getTask;
+        return Optional.ofNullable(subtasks.get(id));
     }
 
     @Override
     public void addTask(Task taskInput) { //Добавляет полученный объект Task в соответсвующий HashMap и проверяет, если такой ID уже.
-        if (tasks.containsKey(taskInput.getId())) {// Проверяет на совместимость с задачей.
+        boolean isTaskExist = tasks.containsKey(taskInput.getId());// Проверяет на наличие задачи.
+
+        if (isTaskExist) {
             System.out.println("Задача с таким ID уже создана");
         } else {
             tasks.put(taskInput.getId(), taskInput);
@@ -101,7 +97,9 @@ class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addEpic(Epic taskInput) { //Добавляет полученный объект Epic в соответсвующий HashMap и проверяет, если такой ID уже.
-        if (epics.containsKey(taskInput.getId())) {//Проверяет на совместимость с Epic.
+        boolean isEpicExist = epics.containsKey(taskInput.getId());//Проверяет на наличие Epic.
+
+        if (isEpicExist) {
             System.out.println("Epic с таким ID уже создан");
         } else {
             epics.put(taskInput.getId(), taskInput);
@@ -110,10 +108,14 @@ class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addSubtask(Subtask taskInput) { //Добавляет полученный объект Subtask в соответсвующий HashMap и проверяет, если такой ID уже.
-        if (subtasks.containsKey(taskInput.getId())) {
+        boolean isSubtaskExist = subtasks.containsKey(taskInput.getId());
+
+        if (isSubtaskExist) {
             System.out.println("Подзадача с таким ID уже создана");
         } else {
-            if (epics.containsKey(((taskInput).getIdEpic()))) { //если есть Epic, к которому подзадача принадлежит.
+            boolean isEpicExist = epics.containsKey(taskInput.getId());//если есть Epic, к которому подзадача принадлежит.
+
+            if (isEpicExist) {
                 subtasks.put(taskInput.getId(), taskInput);
                 epics.get((taskInput).getIdEpic()).
                         addSubtask(taskInput); //Добавляет подзадачу в список определенного Epic.
@@ -126,7 +128,9 @@ class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task taskInput) { // Обновление Task. Новая версия объекта с верным идентификатором передаётся в виде параметра.
-        if (tasks.containsKey(taskInput.getId())) {
+        boolean isTaskExist = tasks.containsKey(taskInput.getId());
+
+        if (isTaskExist) {
             tasks.put(taskInput.getId(), taskInput);
         } else {
             System.out.println("Такой Задачи не существует для обновления");
@@ -135,7 +139,9 @@ class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateEpic(Epic taskInput) { // Обновление Epic. Новая версия объекта с верным идентификатором передаётся в виде параметра.
-        if (epics.containsKey(taskInput.getId())) {
+        boolean isEpicExist = epics.containsKey(taskInput.getId());
+
+        if (isEpicExist) {
             epics.put(taskInput.getId(), taskInput);
 
             for (Subtask subtask : taskInput.getSubtasksArray().values()) {//Обновляю список всех существующих подзадач, после обновления Epic.
@@ -149,7 +155,9 @@ class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubtask(Subtask taskInput) { // Обновление Subtask. Новая версия объекта с верным идентификатором передаётся в виде параметра.
-        if (subtasks.containsKey(taskInput.getId())) {
+        boolean isSubtaskExist = subtasks.containsKey(taskInput.getId());
+
+        if (isSubtaskExist) {
             subtasks.put(taskInput.getId(), taskInput);
             epics.get(taskInput.getIdEpic()).addSubtask(taskInput); //Добавляет подзадачу в список Epic.
             StatusTask.checkStatus(taskInput.getIdEpic(), epics); //Проверяет статус Epic после обновления его подзадачи.
