@@ -55,7 +55,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Optional<Task> getTask(int id) { //Получение Task по идентификатору.
 
-        if (tasks.containsKey(id)) { //Проверяет ID, принадлежит задачам.
+        if (tasks.containsKey(id)) { //Проверяет если такой ID в задачах.
             historyManager.add(tasks.get(id));
         } else {
             System.out.println("Не существует такого ID Task");
@@ -66,7 +66,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Optional<Epic> getEpic(int id) { //Получение Epic по идентификатору.
 
-        if (epics.containsKey(id)) { //Проверяет ID, принадлежит Epic.
+        if (epics.containsKey(id)) { //Проверяет если такой ID в Epic.
             historyManager.add(epics.get(id));
         } else {
             System.out.println("Не существует такого ID Epic");
@@ -77,7 +77,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Optional<Subtask> getSubtask(int id) { //Получение Subtask по идентификатору.
 
-        if (subtasks.containsKey(id)) { //Проверяет ID, принадлежит ли подзадачам.
+        if (subtasks.containsKey(id)) { //Проверяет если такой ID в подзадачах.
             historyManager.add(subtasks.get(id));
         } else {
             System.out.println("Не существует такого ID Subtask");

@@ -1,6 +1,6 @@
 import java.util.List;
 
-interface HistoryManager {
+public interface HistoryManager {
 
     void add(Task task);
 
